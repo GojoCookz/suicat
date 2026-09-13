@@ -1,60 +1,58 @@
-import { LINKS, TOKEN } from '../config/token'
+import { CHAIN, LINKS } from '../config/tokens'
 import { Action } from './ui/Action'
-import { Wordmark } from './Wordmark'
 
 export function Footer() {
   const year = new Date().getFullYear()
 
   return (
-    <footer className="relative overflow-hidden bg-ink">
-      <div
-        aria-hidden="true"
-        className="dither-25 d-sea h-[64px] w-full"
-        style={{ ['--ds' as string]: '8px' }}
-      />
-
-      <div className="shell py-14 md:py-20">
-        <h2 className="t-display text-paper" style={{ fontSize: 'clamp(2.5rem, 10vw, 7rem)' }}>
-          Hold the cat.
-          <br />
-          <span className="text-glow">Get paid in {TOKEN.payoutAsset}.</span>
+    <footer className="bg-wok py-12 text-paper md:py-16">
+      <div className="shell">
+        <h2
+          className="t-display t-outline text-amber"
+          style={{ fontSize: 'clamp(2.25rem, 9vw, 5.5rem)' }}
+        >
+          Pull up a bowl.
         </h2>
 
-        <p className="t-body mt-6 max-w-[50ch] text-[16px] text-paper">
-          Nothing is live yet. The only thing worth doing today is following along, so you get
-          the mint address from us first and not from a copy of us.
-        </p>
-
-        <div className="mt-8 flex flex-wrap items-center gap-4">
-          <span className="btn-block">
-            <Action href={LINKS.x} lockedLabel="Soon">
-              Follow on X
-            </Action>
-          </span>
-          <Action href={LINKS.telegram} variant="ghost" lockedLabel="Soon">
+        <div className="mt-7 flex flex-wrap items-center gap-3">
+          <Action href={LINKS.telegram} variant="sui">
             Telegram
           </Action>
+          <Action href={LINKS.x} variant="ghost">
+            Follow on X
+          </Action>
+          <a
+            className="btn btn--ghost"
+            href={LINKS.revshare}
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            RevShare
+          </a>
         </div>
 
-        <div className="mt-14 flex flex-wrap items-center justify-between gap-5 border-t-[4px] border-sea pt-6">
-          <Wordmark className="text-[14px]" />
-          <nav className="flex flex-wrap gap-5">
+        <div className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t-[3px] border-paper pt-6">
+          <nav className="flex flex-wrap gap-4">
             {[
-              { href: '#mechanic', label: 'Mechanic' },
-              { href: '#facts', label: 'Facts' },
+              { href: '#board', label: 'Board' },
+              { href: '#ladder', label: 'Ladder' },
+              { href: '#contracts', label: 'Contracts' },
+              { href: '#crew', label: 'Crew' },
               { href: '#faq', label: 'FAQ' },
               { href: '#risk', label: 'Risk' },
-            ].map((link) => (
+            ].map((l) => (
               <a
-                key={link.href}
-                className="t-micro text-glow underline-offset-4 hover:text-paper hover:underline"
-                href={link.href}
+                key={l.href}
+                className="t-label underline-offset-4 hover:text-sui hover:underline"
+                href={l.href}
               >
-                {link.label}
+                {l.label}
               </a>
             ))}
           </nav>
-          <p className="t-micro text-glow">{year} · Meme token · No promises</p>
+          <p className="t-label opacity-70">
+            {year} · {CHAIN} meme tokens · no promises
+          </p>
         </div>
       </div>
     </footer>

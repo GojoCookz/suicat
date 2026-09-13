@@ -1,81 +1,117 @@
-import { LINKS, TOKEN } from '../config/token'
+import { CHAIN, LINKS, TOKENS } from '../config/tokens'
+import type { MarketsState } from '../hooks/useMarkets'
+import { formatUsd } from '../lib/dexscreener'
 import { Action } from './ui/Action'
-import { Frame } from './ui/Frame'
-import { Ramp } from './ui/Ramp'
-import { Wordmark } from './Wordmark'
 
-export function Hero() {
+type Props = { markets: MarketsState }
+
+/**
+ * Steam curls rising off the bowl. Sits BEHIND the card and is clipped to the
+ * top edge, so it reads as steam escaping rather than as three white bars
+ * floating on the background.
+ */
+function Steam() {
   return (
-    <header className="relative bg-ink">
+    <div
+      aria-hidden="true"
+      className="pointer-events-none absolute inset-x-0 -top-10 z-0 flex h-10 items-end justify-center gap-6 overflow-hidden"
+    >
+      {[0, 1, 2].map((i) => (
+        <span
+          key={i}
+          className="anim-steam block h-9 w-[10px] rounded-full bg-cream"
+          style={{ animationDelay: `${i * 1.1}s`, opacity: 0 }}
+        />
+      ))}
+    </div>
+  )
+}
+
+export function Hero({ markets }: Props) {
+  const loading = markets.status === 'loading'
+  const combinedMcap = TOKENS.reduce<number | null>((sum, t) => {
+    const v = markets.data[t.mint]?.marketCap
+    if (v === null || v === undefined) return sum
+    return (sum ?? 0) + v
+  }, null)
+
+  return (
+    <header className="relative overflow-hidden bg-amber">
       <div className="shell">
-        <div className="flex items-center justify-between gap-4 py-5 md:py-7">
-          <Wordmark className="text-[15px] md:text-[18px]" />
-          <span className="t-micro text-glow">
-            {TOKEN.chain} only · {TOKEN.payoutAsset} in, {TOKEN.payoutAsset} out
+        <nav className="flex items-center justify-between gap-4 py-5">
+          <span className="t-display text-[22px] text-wok md:text-[26px]">
+            Chop<span className="text-chili">Sui</span> Crew
           </span>
-        </div>
+          <div className="hidden items-center gap-2 md:flex">
+            <a className="btn btn--sm btn--ghost" href="#board">
+              Board
+            </a>
+            <a className="btn btn--sm btn--ghost" href="#ladder">
+              Ladder
+            </a>
+            <a className="btn btn--sm btn--ghost" href="#contracts">
+              Contracts
+            </a>
+          </div>
+        </nav>
 
-        <div aria-hidden="true" className="px-rule text-sea" />
-
-        {/* status. the most important honest fact on the page, so it goes first. */}
-        <div className="mt-7 md:mt-9">
-          <span className="inline-flex items-center gap-[10px] bg-glow px-4 py-[10px] t-micro text-ink">
-            <span aria-hidden="true" className="anim-blink inline-block h-[8px] w-[8px] bg-ink" />
-            Pre-launch · no contract yet
-          </span>
-        </div>
-
-        <div className="mt-7 grid gap-10 md:mt-12 md:grid-cols-[1.1fr_0.9fr] md:items-center md:gap-14">
+        <div className="grid gap-8 pb-14 pt-4 md:grid-cols-[1.05fr_0.95fr] md:items-center md:gap-12 md:pb-20">
           <div>
+            <span className="chip chip--live">
+              {CHAIN} · {TOKENS.length} tokens · rewards paid on-chain
+            </span>
+
             <h1
-              className="t-display text-paper"
-              style={{ fontSize: 'clamp(3.5rem, 15vw, 10rem)' }}
+              className="t-display t-outline-lg mt-5 text-amber"
+              style={{ fontSize: 'clamp(3rem, 12vw, 7.5rem)' }}
             >
-              Huh?
-              <br />
-              What&rsquo;s <span className="text-glow">{TOKEN.jokeChain}</span>?
+              Everyone eats.
             </h1>
 
-            <p className="t-body mt-7 max-w-[46ch] text-[17px] text-paper md:text-[20px]">
-              Exactly. ${TOKEN.ticker} is a {TOKEN.chain} token. You pay in{' '}
-              {TOKEN.quoteAsset}, you hold a {TOKEN.chain} token, and every trade pays you
-              back in {TOKEN.payoutAsset}. The name is a joke. The rewards are not.
+            <p className="t-body mt-5 max-w-[46ch] text-[17px] md:text-[20px]">
+              The ChopSui crew is a bowl of {CHAIN} tokens that pay their holders.
+              SUICAT V1 pays you V2. V2 pays you SOL. ChopSui is the bowl it all
+              sits in.
             </p>
 
-            <div className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-4 md:mt-10">
-              <span className="btn-block">
-                <a className="btn btn--primary" href="#mechanic">
-                  See how it works
-                </a>
-              </span>
-
-              <Action href={LINKS.x} variant="ghost" lockedLabel="Soon">
-                Follow on X
+            <div className="mt-7 flex flex-wrap items-center gap-3">
+              <a className="btn btn--primary" href="#board">
+                See the board
+              </a>
+              <Action href={LINKS.telegram} variant="ghost">
+                Telegram
               </Action>
+            </div>
+
+            <div className="sticker sticker--cream mt-7 inline-flex flex-wrap items-baseline gap-x-3 gap-y-1 px-4 py-3">
+              <span className="t-label opacity-70">Crew market cap</span>
+              <span className="t-num text-[20px]">
+                {loading ? <span className="skeleton w-16" /> : formatUsd(combinedMcap)}
+              </span>
+              <span className="t-label opacity-60">via DexScreener</span>
             </div>
           </div>
 
-          {/* the cat */}
-          <div className="relative mx-auto w-full max-w-[340px] md:max-w-none">
-            <Frame edge="paper" fill="glow" stepped className="anim-bob">
-              <img
-                src="/cat.png"
-                width={1000}
-                height={1000}
-                alt="Pixel-art white cat looking up at a large question mark."
-                className="block h-auto w-full"
-                fetchPriority="high"
-              />
-            </Frame>
-            <p className="t-micro mt-4 text-center text-glow">
-              named after a chain it does not use
+          <div className="relative mx-auto w-full max-w-[420px] md:max-w-none">
+            <div className="relative isolate">
+              <Steam />
+              <div className="sticker anim-bob relative z-10 overflow-hidden p-0">
+                <img
+                  src="/crew.png"
+                  width={800}
+                  height={800}
+                  alt="The ChopSui crew: a hippo in a blue jacket, a blue dog in a cap and sunglasses, and a blue cat with chopsticks, around a bowl of chop suey."
+                  className="block h-auto w-full"
+                  fetchPriority="high"
+                />
+              </div>
+            </div>
+            <p className="t-label mt-4 text-center opacity-70">
+              hippo · dog · cat — the whole crew
             </p>
           </div>
         </div>
       </div>
-
-      {/* dithered ramp into the accent band below. the pixel-art answer to a gradient. */}
-      <Ramp tone="glow" direction="up" className="mt-14 md:mt-20" />
     </header>
   )
 }
