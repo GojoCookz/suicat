@@ -10,6 +10,7 @@ import {
 import { CopyButton } from './ui/CopyButton'
 import { Reveal } from './ui/Reveal'
 import { Stat } from './ui/Stat'
+import { TokenArt } from './ui/TokenArt'
 
 type Props = { markets: MarketsState }
 
@@ -99,16 +100,19 @@ export function LiveBoard({ markets }: Props) {
                     token.flagship ? 'sticker--sui' : ''
                   }`}
                 >
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="min-w-0">
-                      <h3 className="t-display text-[26px] leading-none text-wok">
-                        {token.label}
-                      </h3>
+                  <div className="flex items-start gap-3">
+                    <TokenArt art={token.art} size="md" decorative />
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-start justify-between gap-2">
+                        <h3 className="t-display text-[26px] leading-none text-wok">
+                          {token.label}
+                        </h3>
+                        {token.flagship && <span className="chip shrink-0">Flagship</span>}
+                      </div>
                       <p className="t-label mt-2 opacity-70">
                         ${token.ticker} · on-chain name &ldquo;{token.onchainName}&rdquo;
                       </p>
                     </div>
-                    {token.flagship && <span className="chip shrink-0">Flagship</span>}
                   </div>
 
                   <p className="t-body mt-3 text-[15px]">{token.role}</p>

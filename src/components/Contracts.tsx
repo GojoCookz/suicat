@@ -1,6 +1,7 @@
 import { TOKENS } from '../config/tokens'
 import { CopyButton } from './ui/CopyButton'
 import { Reveal } from './ui/Reveal'
+import { TokenArt } from './ui/TokenArt'
 
 /**
  * Full, unabbreviated addresses. This is the section people will actually act
@@ -31,11 +32,14 @@ export function Contracts() {
             <Reveal key={token.id} delay={60 + i * 50}>
               <div className="sticker p-5 text-wok md:p-6">
                 <div className="flex flex-wrap items-center justify-between gap-3">
-                  <div>
-                    <h3 className="t-display text-[24px] leading-none">{token.label}</h3>
-                    <p className="t-label mt-2 opacity-70">
-                      Pays {token.pays.asset ?? 'not confirmed'}
-                    </p>
+                  <div className="flex items-center gap-3">
+                    <TokenArt art={token.art} size="sm" decorative />
+                    <div>
+                      <h3 className="t-display text-[24px] leading-none">{token.label}</h3>
+                      <p className="t-label mt-2 opacity-70">
+                        Pays {token.pays.asset ?? 'not confirmed'}
+                      </p>
+                    </div>
                   </div>
                   <a
                     className="btn btn--sm btn--ghost"

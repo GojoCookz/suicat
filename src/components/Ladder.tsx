@@ -1,16 +1,27 @@
 import { Fragment } from 'react'
 import { REVSHARE_DOCS, byId } from '../config/tokens'
 import { Reveal } from './ui/Reveal'
+import { TokenArt } from './ui/TokenArt'
 
 const V1 = byId('suicatV1')
 const V2 = byId('suicatV2')
 
-type Rung = { title: string; sub: string; tone: string }
+type Rung = {
+  title: string
+  sub: string
+  tone: string
+  art: { src: string; alt: string; pixel: boolean } | null
+}
 
 const RUNGS: Rung[] = [
-  { title: V1.label, sub: 'You hold this', tone: 'sticker--cream' },
-  { title: V2.label, sub: `${V1.label} pays you this`, tone: 'sticker--sui' },
-  { title: 'SOL', sub: `${V2.label} pays you this`, tone: 'sticker--deep' },
+  { title: V1.label, sub: 'You hold this', tone: 'sticker--cream', art: V1.art },
+  {
+    title: V2.label,
+    sub: `${V1.label} pays you this`,
+    tone: 'sticker--sui',
+    art: V2.art,
+  },
+  { title: 'SOL', sub: `${V2.label} pays you this`, tone: 'sticker--deep', art: null },
 ]
 
 /** The chopsticks between rungs, with a travelling dot. */
@@ -52,10 +63,24 @@ export function Ladder() {
                 {i > 0 && <Rail />}
                 <div className={`sticker ${rung.tone} flex-1 p-5 md:p-6`}>
                   <p className="t-label opacity-70">Step {i + 1}</p>
-                  <h3 className="t-display mt-2 text-[30px] leading-none md:text-[34px]">
-                    {rung.title}
-                  </h3>
-                  <p className="t-body mt-2 text-[15px]">{rung.sub}</p>
+                  <div className="mt-3 flex items-center gap-3">
+                    {rung.art ? (
+                      <TokenArt art={rung.art} size="lg" decorative />
+                    ) : (
+                      <span
+                        aria-hidden="true"
+                        className="t-display flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl border-[3px] border-wok bg-paper text-[26px] text-wok"
+                      >
+                        SOL
+                      </span>
+                    )}
+                    <div className="min-w-0">
+                      <h3 className="t-display text-[26px] leading-none md:text-[30px]">
+                        {rung.title}
+                      </h3>
+                      <p className="t-body mt-2 text-[15px]">{rung.sub}</p>
+                    </div>
+                  </div>
                 </div>
               </Fragment>
             ))}

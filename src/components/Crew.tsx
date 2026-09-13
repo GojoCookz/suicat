@@ -1,6 +1,11 @@
+import { byId } from '../config/tokens'
 import { Reveal } from './ui/Reveal'
+import { TokenArt } from './ui/TokenArt'
 
-type Member = { name: string; role: string; line: string; tone: string }
+type Art = { src: string; alt: string; pixel: boolean }
+type Member = { name: string; role: string; line: string; tone: string; art: Art | null }
+
+const SUICAT_ART = byId('suicatV2').art
 
 /**
  * The three characters in the artwork. Personality copy only — nothing here
@@ -12,18 +17,21 @@ const CREW: Member[] = [
     role: 'Eats first',
     line: 'Big coat, bigger appetite. Shows up for every bowl and never sells the noodles.',
     tone: 'sticker--cream',
+    art: null,
   },
   {
     name: 'The Dog',
     role: 'Runs the kitchen',
     line: 'Cap, shades, gold chain. Has never explained where the recipe came from.',
     tone: 'sticker--sui',
+    art: null,
   },
   {
     name: 'The Cat',
     role: 'Holds the chopsticks',
     line: 'The one on the front of SUICAT. Permanently unsure what Sui is. Gets paid anyway.',
     tone: 'sticker--chili',
+    art: SUICAT_ART,
   },
 ]
 
@@ -45,6 +53,7 @@ export function Crew() {
           {CREW.map((m, i) => (
             <Reveal key={m.name} delay={60 + i * 60}>
               <article className={`sticker ${m.tone} h-full p-6`}>
+                {m.art && <TokenArt art={m.art} size="lg" decorative className="mb-4" />}
                 <p className="t-label opacity-80">{m.role}</p>
                 <h3 className="t-display mt-2 text-[30px] leading-none">{m.name}</h3>
                 <p className="t-body mt-3 text-[15px]">{m.line}</p>

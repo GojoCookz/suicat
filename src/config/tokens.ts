@@ -36,6 +36,14 @@ export type TokenDef = {
   /** Flagship of the crew gets visual priority. */
   flagship: boolean
   dexscreener: string
+  /** Token art. Shown anywhere the token is named. */
+  art: { src: string; alt: string; pixel: boolean }
+}
+
+const SUICAT_ART = {
+  src: '/suicat.png',
+  alt: 'SuiCat: a pixel-art white cat looking up at a large question mark.',
+  pixel: true,
 }
 
 export const TOKENS: TokenDef[] = [
@@ -51,6 +59,11 @@ export const TOKENS: TokenDef[] = [
     pays: { asset: null, note: null },
     flagship: true,
     dexscreener: 'https://dexscreener.com/solana/sUiYveS2o7BfvkDWcdcMwUKPDqkxoBJnuwZVeeh3shq',
+    art: {
+      src: '/crew.png',
+      alt: 'The ChopSui crew around a bowl of chop suey.',
+      pixel: false,
+    },
   },
   {
     id: 'suicatV1',
@@ -62,6 +75,7 @@ export const TOKENS: TokenDef[] = [
     pays: { asset: 'SUICAT V2', note: 'Holders are paid in SUICAT V2.' },
     flagship: false,
     dexscreener: 'https://dexscreener.com/solana/hFyV6R6Gok9qr6rmY5J6EwgnJ5iBbbWRNVVTw7fGREV',
+    art: SUICAT_ART,
   },
   {
     id: 'suicatV2',
@@ -73,6 +87,7 @@ export const TOKENS: TokenDef[] = [
     pays: { asset: 'SOL', note: 'Holders are paid in SOL.' },
     flagship: false,
     dexscreener: 'https://dexscreener.com/solana/DWKWx7vpgpHUYuWgkrZc11eEgMgy5iLzfCefhmjXbREV',
+    art: SUICAT_ART,
   },
 ]
 
